@@ -4,10 +4,13 @@ from sys import exit
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Healthy Eating Game")
+pygame.display.set_caption("Among us sample")
 clock = pygame.time.Clock()
-
-
+"""
+start_screen = pygame.image.load("assets/start_screen.png").convert_alpha
+play_btn = pygame.image.load("assets/start.png").convert_alpha
+play_rect = play_btn.get_rect(center = (400, 350))
+"""
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -65,6 +68,25 @@ class Target(pygame.sprite.Sprite):
         if self.rect.x <= -100:
             self.kill()
 
+def check_collisions():
+    global score
+    if player.sprite:
+        collided_targets = pygame.sprite.spritecollide(player.sprite, target_group, True)
+        if collided_targets:
+            score += 1
+
+game_screen = 1
+score = 0
+score_font = pygame.font.Font(None,30)
+
+def display_score():
+    score_surf = score_font.render("Score:" + str(score), True, (50,50,50))
+    score_rect = score_surf.get_rect(center = (100, 50))
+    screen.blit(score_surf, score_rect)
+
+
+
+
 target_group = pygame.sprite.Group()
 player = pygame.sprite.GroupSingle()
 player.add(Player())
@@ -87,11 +109,12 @@ while True:
     target_group.update()
     if not target_group:
         i = random.randint(0,1)
-        choices = ['safe','imposter']
+        choices = ['imposter','safe']
         target_group.add(Target(choices[i]))     
 
     player.update()
     player.draw(screen)
-    
+    check_collisions()
+    display_score()
     pygame.display.update()
     clock.tick(60)
