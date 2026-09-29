@@ -88,7 +88,7 @@ class Target(pygame.sprite.Sprite):
         if type == "kilogram":
             self.image = pygame.image.load("assets/kilogram.png").convert_alpha()
         else:
-            self.image = pygame.image.load("assets/safe.png").convert_alpha()
+            self.image = pygame.image.load("assets/book.png").convert_alpha()
         self.rect = self.image.get_rect(center = (self.start, 330))
 
     def update(self):
@@ -104,7 +104,7 @@ def check_collisions():
     if player.sprite:
         collided_targets = pygame.sprite.spritecollide(player.sprite, target_group, True)
         for target in collided_targets:
-            if target.type == "safe":
+            if target.type == "book":
                 focus += 1
             else:
                 focus -= 1
@@ -172,7 +172,7 @@ while True:
        
         if not target_group:
             i = random.randint(0,1)
-            choices = ['kilogram','safe']
+            choices = ['kilogram','book']
             target_group.add(Target(choices[i]))  
 
 
